@@ -1,6 +1,6 @@
 "use client"
 
-import { BookOpenCheck, Flame, Clock, Target, CheckCircle2, Circle, Bell, RefreshCw, TrendingUp } from "lucide-react"
+import { BookOpenCheck, Flame, Clock, Target, CheckCircle2, Circle, Bell, RefreshCw, TrendingUp, GraduationCap } from "lucide-react"
 import { GlassCard } from "@/components/glass-card"
 import { BarChart, Badge, Progress } from "@/components/ui-bits"
 import { useStore, computeStreak, studyMinutesByDay, lastNDays } from "@/lib/store"
@@ -32,7 +32,49 @@ function StatTile({
     </GlassCard>
   )
 }
+function ExamCountdown() {
+  // تاریخ کنکور: ۱۰ تیر ۱۴۰۶
+  const examDate = new Date(2027, 5, 30)
 
+  const now = new Date()
+
+  // فقط تاریخ‌ها را مقایسه می‌کنیم تا ساعت روی نتیجه تأثیر نگذارد
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  const diffMs = examDate.getTime() - today.getTime()
+  const daysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)))
+
+  return (
+    <GlassCard strong className="overflow-hidden p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+            <GraduationCap className="size-6" />
+          </div>
+
+          <div>
+            <p className="text-sm text-muted-foreground">روز‌شمار کنکور</p>
+            <h2 className="mt-0.5 text-lg font-bold">تا کنکور ۱۴۰۶</h2>
+          </div>
+        </div>
+
+        <div className="text-right sm:text-left">
+          <p className="text-4xl font-black text-primary">
+            {toFa(daysLeft)}
+          </p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            روز باقی‌مانده
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between rounded-xl bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+        <span>تاریخ کنکور</span>
+        <span className="font-medium text-foreground">۱۰ تیر ۱۴۰۶</span>
+      </div>
+    </GlassCard>
+  )
+}
 export function DashboardView({ onNavigate }: { onNavigate: (t: string) => void }) {
   const { state, toggleTask } = useStore()
   const today = todayKey()
@@ -64,6 +106,7 @@ export function DashboardView({ onNavigate }: { onNavigate: (t: string) => void 
   return (
     <div className="space-y-6">
       <GlassCard strong className="overflow-hidden p-6">
+              <ExamCountdown />
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-sm text-muted-foreground">{formatJalali(new Date(), { withWeekday: true })}</p>
